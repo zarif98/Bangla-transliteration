@@ -4,8 +4,13 @@ export function useSpeechRecognition() {
   const [isListening, setIsListening] = useState(false);
   const [banglaText, setBanglaText] = useState('');
   const [interimText, setInterimText] = useState('');
-  const [error, setError] = useState(null);
-  const [isSupported, setIsSupported] = useState(false);
+  const [isSupported] = useState(() =>
+    typeof window !== 'undefined' &&
+    Boolean(window.SpeechRecognition || window.webkitSpeechRecognition)
+  );
+  const [error, setError] = useState(() =>
+    isSupported ? null : 'Speech recognition is not supported in this browser.'
+  );
   const recognitionRef = useRef(null);
 
   useEffect(() => {
@@ -13,7 +18,6 @@ export function useSpeechRecognition() {
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (SpeechRecognition) {
-      setIsSupported(true);
       const recognition = new SpeechRecognition();
       recognition.lang = 'bn-BD'; // Bangla (Bangladesh)
       recognition.continuous = true;
@@ -55,7 +59,7 @@ export function useSpeechRecognition() {
         if (recognitionRef.current?._shouldListen) {
           try {
             recognition.start();
-          } catch (e) {
+          } catch {
             // Already started
           }
         } else {
@@ -64,9 +68,6 @@ export function useSpeechRecognition() {
       };
 
       recognitionRef.current = recognition;
-    } else {
-      setIsSupported(false);
-      setError('Speech recognition is not supported in this browser.');
     }
 
     return () => {
@@ -74,7 +75,7 @@ export function useSpeechRecognition() {
         recognitionRef.current._shouldListen = false;
         try {
           recognitionRef.current.stop();
-        } catch (e) {
+        } catch {
           // Already stopped
         }
       }
@@ -88,7 +89,7 @@ export function useSpeechRecognition() {
       try {
         recognitionRef.current.start();
         setIsListening(true);
-      } catch (e) {
+      } catch {
         setError('Failed to start speech recognition.');
       }
     }
@@ -99,7 +100,7 @@ export function useSpeechRecognition() {
       recognitionRef.current._shouldListen = false;
       try {
         recognitionRef.current.stop();
-      } catch (e) {
+      } catch {
         // Already stopped
       }
       setIsListening(false);

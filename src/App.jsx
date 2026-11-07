@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Mic, MicOff, Trash2, Copy, Check, Keyboard, AlertCircle, Settings2, Loader2 } from 'lucide-react'
 import { useSpeechRecognition } from './hooks/useSpeechRecognition'
 import { transliterateCasual, transliterateText, TRANSLITERATION_MODES } from './lib/transliterationService'

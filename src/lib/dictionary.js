@@ -229,9 +229,7 @@ const DICTIONARY = {
 
   // Common expressions
   'কেমন': 'kemon',
-  'আছো': 'acho',
   'বাংলায়': 'banglay',
-  'বলি': 'boli',
   'আকাশ': 'akash',
   'মেঘ': 'megh',
   'একটি': 'ekti',
